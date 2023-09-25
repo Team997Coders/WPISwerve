@@ -9,7 +9,7 @@ This is simple code to test out a single swerve module on our test drivetrain.  
   * analog sensor on turning axis (turnAngleEncoder)
   * drive motor distance encoder (driveEncoder)
 * Control to reset encoders
-* Dashboard with all encoders and button for reset-encoders
+* Dashboard with all encoders
 * Methods to move the motors
   * actual control input from Gamepad left and right joysticks
 * Method to select which module to control
