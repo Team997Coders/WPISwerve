@@ -11,9 +11,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxAnalogSensor;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,14 +26,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 public class Robot extends TimedRobot {
   private Joystick m_stick;
-  private static final int driveMotorDeviceID = 1;
-  private static final int turnMotorDeviceID = 2;
-  private static int m_moduleID = 1;
+  private static final int driveMotorDeviceID = 6;
+  private static final int turnMotorDeviceID = 7;
+  private static int m_moduleID = 2;
   private CANSparkMax m_driveMotor;
   private CANSparkMax m_turnMotor;
   private RelativeEncoder m_driveMotorEncoder;
   private RelativeEncoder m_turnMotorEncoder;
-  private SparkMaxAnalogSensor m_turnAngleEncoder;
+  private SparkMaxAbsoluteEncoder m_turnAngleEncoder;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -56,8 +59,7 @@ public class Robot extends TimedRobot {
     m_driveMotorEncoder = m_driveMotor.getEncoder();
     m_turnMotorEncoder = m_turnMotor.getEncoder();
 
-    m_turnAngleEncoder = m_turnMotor.getAnalog(SparkMaxAnalogSensor.Mode.kAbsolute);
-
+    m_turnAngleEncoder = m_turnMotor.getAbsoluteEncoder(Type.kDutyCycle);
     resetEncoders();
     stopAll();
   }
