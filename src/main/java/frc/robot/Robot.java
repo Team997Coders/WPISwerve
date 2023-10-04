@@ -26,9 +26,9 @@ import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
  */
 public class Robot extends TimedRobot {
   private Joystick m_stick;
-  private static final int driveMotorDeviceID = 6;
-  private static final int turnMotorDeviceID = 7;
-  private static int m_moduleID = 2;
+  private static final int driveMotorDeviceID = 4;
+  private static final int turnMotorDeviceID = 5;
+  private static int m_moduleID = 3;
   private CANSparkMax m_driveMotor;
   private CANSparkMax m_turnMotor;
   private RelativeEncoder m_driveMotorEncoder;
