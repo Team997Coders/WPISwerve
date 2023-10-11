@@ -40,7 +40,8 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Drive Encoder",
     // module.m_driveMotorEncoder.getPosition());
     // SmartDashboard.putNumber("Turning Motor Encoder",
-    // module.m_turnMotorEncoder.getPosition());
+    SmartDashboard.putNumber("Drive Encoder Position: ", module.getDriveEncoder());
+    SmartDashboard.putNumber("Drive Encoder Velocity: ", module.getDriveEncoderVelocity());
     SmartDashboard.putNumber("Module Turning Angle: ", module.getAngle());
 
     //module.setPIDposition(0.0, 0.0);
