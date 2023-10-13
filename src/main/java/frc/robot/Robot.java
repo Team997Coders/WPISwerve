@@ -6,14 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Joystick;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
-import com.revrobotics.SparkMaxAnalogSensor;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
@@ -25,10 +22,8 @@ import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Joystick m_stick;
   private static final int driveMotorDeviceID = 4;
   private static final int turnMotorDeviceID = 5;
-  private static int m_moduleID = 3;
   private CANSparkMax m_driveMotor;
   private CANSparkMax m_turnMotor;
   private RelativeEncoder m_driveMotorEncoder;
@@ -41,7 +36,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_stick = new Joystick(0);
     m_driveMotor = new CANSparkMax(driveMotorDeviceID, MotorType.kBrushless);
     m_driveMotor.restoreFactoryDefaults();
     m_driveMotor.clearFaults();
