@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -47,6 +48,13 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Turning Motor Encoder",
     SmartDashboard.putNumber("Module State - Velocity: ", state.speedMetersPerSecond);
     SmartDashboard.putNumber("Module State - Angle: ",state.angle.getDegrees());
+    // raw hardware
+    SmartDashboard.putNumber("Raw Angle", module.getAngle());
+    SmartDashboard.putNumber("Raw Turning Motor Angle", module.getTurningEncoder());
+    SmartDashboard.putNumber("Raw Drive Position", module.getDriveEncoderPosition());
+    SmartDashboard.putNumber("Raw Drive Velocity", module.getDriveEncoderVelocity());
+    SmartDashboard.putNumber("Turning PID Goal", module.getTurnGoal());
+
 
     //module.setPIDposition(0.0, 0.0);
   }
