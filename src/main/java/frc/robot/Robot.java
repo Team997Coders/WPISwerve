@@ -4,11 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
+import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -68,6 +70,16 @@ public class Robot extends TimedRobot {
     m_turnMotor.set(0);
   }
 
+  @Override
+  public void teleopInit() {
+    m_turnMotor.set(0.2);
+  }
+
+  @Override
+  public void disabledInit() {
+    stopAll();
+  }
+
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -80,5 +92,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Drive Encoder", m_driveMotorEncoder.getPosition());
     SmartDashboard.putNumber("Turning Motor Encoder", m_turnMotorEncoder.getPosition());
     SmartDashboard.putNumber("Turning Angle Encoder", m_turnAngleEncoder.getPosition());
+  }
+
+  public void simulationInit(){
+    REVPhysicsSim.getInstance().addSparkMax(m_turnMotor, DCMotor.getNEO(1));
+  }
+
+  public void simulationPeriodic(){
+    REVPhysicsSim.getInstance().run();    
+    System.out.println("Motor speed: " + m_turnMotorEncoder.getPosition());
   }
 }
