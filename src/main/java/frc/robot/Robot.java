@@ -5,10 +5,14 @@
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.SwerveModule;
+import frc.robot.subsystems.SwerveModule;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,30 +30,24 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    module = new SwerveModule(1, ModuleConstants.kMOD_1_Constants);
+    module = new SwerveModule(ModuleConstants.kMOD_1_Constants);
     m_gyro = new AHRS();
   }
 
   @Override
   public void autonomousPeriodic() {
-    module.setPIDposition(0.0, 0.0);
+    module.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(0.0)));
   }
 
   @Override
   public void robotPeriodic() {
+    SwerveModuleState state = module.getState();
     // SmartDashboard.putNumber("Drive Encoder",
     // module.m_driveMotorEncoder.getPosition());
     // SmartDashboard.putNumber("Turning Motor Encoder",
-    SmartDashboard.putNumber("Drive Encoder Position: ", module.getDriveEncoder());
-    SmartDashboard.putNumber("Drive Encoder Velocity: ", module.getDriveEncoderVelocity());
-    SmartDashboard.putNumber("Module Turning Angle: ", module.getAngle());
+    SmartDashboard.putNumber("Module State - Velocity: ", state.speedMetersPerSecond);
+    SmartDashboard.putNumber("Module State - Angle: ",state.angle.getDegrees());
 
     //module.setPIDposition(0.0, 0.0);
   }
-
-  @Override
-  public void disabledInit() {
-     module.stopAll();
-  }
-
 }
