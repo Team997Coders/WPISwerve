@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    module.setDesiredState(new SwerveModuleState(1.0, new Rotation2d(0.0)));
+    module.setDesiredState(new SwerveModuleState(1.0, new Rotation2d(1.0)));
   }
 
   @Override

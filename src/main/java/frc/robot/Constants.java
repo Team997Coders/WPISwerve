@@ -99,11 +99,10 @@ public final class Constants {
     public static final double kAngleEncodeVelocityPerRev = DRIVE_ROTATIONS_TO_METERS / 60.0;
 
     public static final double kPModuleTurningController = 0.0254;
-
     public static final double kPModuleDriveController = 0.0254;
 
     /** Idle modes. */
-    public static final IdleMode DRIVE_IDLE_MODE = IdleMode.kBrake;
+    public static final IdleMode DRIVE_IDLE_MODE = IdleMode.kCoast;
     public static final IdleMode ANGLE_IDLE_MODE = IdleMode.kCoast;
 
     /** Current limiting. */
