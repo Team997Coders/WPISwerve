@@ -29,13 +29,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    module = new SwerveModule(ModuleConstants.kMOD_1_Constants);
+    module = new SwerveModule(ModuleConstants.kMOD_3_Constants);
     m_gyro = new AHRS();
   }
 
   @Override
   public void autonomousPeriodic() {
-    module.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(0.0)));
+    module.setDesiredState(new SwerveModuleState(1.0, new Rotation2d(0.0)));
   }
 
   @Override

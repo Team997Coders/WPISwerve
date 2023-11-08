@@ -72,7 +72,7 @@ public final class Constants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
-    public static final int kEncoderCPR = 1024;
+    public static final int kEncoderCPR = 42;
     public static final double kWheelDiameterMeters = 0.15;
     public static final double kDriveEncoderDistancePerPulse =
         // Assumes the encoders are directly mounted on the wheel shafts
@@ -98,9 +98,9 @@ public final class Constants {
     public static final double kAngleEncodeAnglePerRev = (Math.PI * 2);
     public static final double kAngleEncodeVelocityPerRev = DRIVE_ROTATIONS_TO_METERS / 60.0;
 
-    public static final double kPModuleTurningController = 1;
+    public static final double kPModuleTurningController = 0.0254;
 
-    public static final double kPModuleDriveController = 1;
+    public static final double kPModuleDriveController = 0.0254;
 
     /** Idle modes. */
     public static final IdleMode DRIVE_IDLE_MODE = IdleMode.kBrake;
@@ -118,18 +118,18 @@ public final class Constants {
     // Front Left Module
     public static final SwerveModuleConstants kMOD_1_Constants = new SwerveModuleConstants(
       1,
-      6,
-      7,
-      false,
-      false,
+      8,
+      1,
+      true,
+      true,
       254.5 // 360 * 0.7069
     );
 
     // Front Right
     public static final SwerveModuleConstants kMOD_2_Constants = new SwerveModuleConstants(
       2,
-      4,
-      5,
+      6,
+      7,
       true,
       true,
       152.0 // 360*0.4221 
@@ -140,16 +140,16 @@ public final class Constants {
       3,
       2,
       3,
-      false,
-      false,
+      true,
+      true,
       0.0
     );
 
     // Back Right
     public static final SwerveModuleConstants kMOD_4_Constants = new SwerveModuleConstants(
       4,
-      1,
-      8,
+      4,
+      5,
       true,
       true,
       0.0
