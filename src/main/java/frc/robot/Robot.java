@@ -9,9 +9,13 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.subsystems.SwerveModule;
+import frc.robot.utils.NavXSwerve;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,35 +29,49 @@ import frc.robot.subsystems.SwerveModule;
 public class Robot extends TimedRobot {
   public SwerveModule module;
   // The gyro sensor
-  public static AHRS m_gyro;
+  public static NavXSwerve m_gyro;
+
+  public XboxController m_driverController = new XboxController(0);
 
   @Override
   public void robotInit() {
     module = new SwerveModule(ModuleConstants.kMOD_3_Constants);
-    m_gyro = new AHRS();
+    m_gyro = new NavXSwerve(SerialPort.Port.kMXP);
   }
 
   @Override
   public void autonomousPeriodic() {
-    module.setDesiredState(new SwerveModuleState(1.0, new Rotation2d(1.0)));
+    module.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(0.0)));
+  }
+
+  @Override
+  public void teleopPeriodic() {
+    double joy_angle = m_driverController.getLeftX() * Math.PI;
+    SmartDashboard.putNumber("Joystick Angle", joy_angle);
+    module.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(joy_angle)));
+    SmartDashboard.putNumber("Raw Joy Angle:", new Rotation2d(joy_angle).getDegrees());
   }
 
   @Override
   public void robotPeriodic() {
+    // swerve module state
     SwerveModuleState state = module.getState();
-    // SmartDashboard.putNumber("Drive Encoder",
-    // module.m_driveMotorEncoder.getPosition());
-    // SmartDashboard.putNumber("Turning Motor Encoder",
     SmartDashboard.putNumber("Module State - Velocity: ", state.speedMetersPerSecond);
-    SmartDashboard.putNumber("Module State - Angle: ",state.angle.getDegrees());
+    SmartDashboard.putNumber("Module State - Angle: ", state.angle.getDegrees());
+    SmartDashboard.putNumber("Module Position - Distance: ", module.getPosition().distanceMeters);
+    SmartDashboard.putNumber("Module Position - Angle: ", module.getPosition().angle.getDegrees());
     // raw hardware
     SmartDashboard.putNumber("Raw Angle", module.getAngle());
     SmartDashboard.putNumber("Raw Turning Motor Angle", module.getTurningEncoder());
+    // turning PID information
+    SmartDashboard.putNumber("PID/Setpoint", module.m_turningPIDController.getSetpoint().position);
+    SmartDashboard.putNumber("PID/Error", module.m_turningPIDController.getPositionError());
+    SmartDashboard.putNumber("PID/Goal", module.getTurnGoal());
+    //
     SmartDashboard.putNumber("Raw Drive Position", module.getDriveEncoderPosition());
     SmartDashboard.putNumber("Raw Drive Velocity", module.getDriveEncoderVelocity());
-    SmartDashboard.putNumber("Turning PID Goal", module.getTurnGoal());
-
-
-    //module.setPIDposition(0.0, 0.0);
+    //
+    SmartDashboard.putNumber("Gyro YAW", m_gyro.getYaw());
+    SmartDashboard.putNumber("Gyro Robotation", m_gyro.getRotation3d().getAngle());
   }
 }
