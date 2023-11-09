@@ -104,6 +104,8 @@ public final class Constants {
     /* Note that these angle constants refer to the CTRE absolute encoder
      * The absolute encoder natively reads 0.0 -> 1.0
      */ 
+    public static final double kMinTurnEncoderOutput = 0.0; // Native Units
+    public static final double kMaxTurnEncoderOutput = 1.0; // Native units
     public static final double kAngleEncodeAnglePerRev = (Math.PI * 2);
     public static final double kAngleEncodeVelocityPerRev = DRIVE_ROTATIONS_TO_METERS / 60.0;
 
