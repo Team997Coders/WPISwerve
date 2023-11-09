@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
     double joy_angle = m_driverController.getLeftX() * Math.PI;
     SmartDashboard.putNumber("Joystick Angle", joy_angle);
     module.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(joy_angle)));
-    SmartDashboard.putNumber("Raw Joy Angle:", new Rotation2d(joy_angle).getDegrees());
+    //SmartDashboard.putNumber("Raw Joy Angle:", new Rotation2d(joy_angle).getDegrees());
   }
 
   @Override
@@ -72,6 +72,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Raw Drive Velocity", module.getDriveEncoderVelocity());
     //
     SmartDashboard.putNumber("Gyro YAW", m_gyro.getYaw());
-    SmartDashboard.putNumber("Gyro Robotation", m_gyro.getRotation3d().getAngle());
+    SmartDashboard.putNumber("Gyro Rotation", m_gyro.getRotation3d().getAngle());
   }
 }
