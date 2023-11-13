@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -14,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.subsystems.SwerveModule;
 import frc.robot.utils.NavXSwerve;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 
 /**
@@ -46,7 +43,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double joy_angle = m_driverController.getLeftX() * Math.PI;
+    double joy_angle = m_driverController.getLeftX();
     SmartDashboard.putNumber("Joystick Angle", joy_angle);
     module.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(joy_angle)));
     //SmartDashboard.putNumber("Raw Joy Angle:", new Rotation2d(joy_angle).getDegrees());
@@ -61,12 +58,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Module Position - Distance: ", module.getPosition().distanceMeters);
     SmartDashboard.putNumber("Module Position - Angle: ", module.getPosition().angle.getDegrees());
     // raw hardware
-    SmartDashboard.putNumber("Raw Angle", module.getAngle());
-    SmartDashboard.putNumber("Raw Turning Motor Angle", module.getTurningEncoder());
+    SmartDashboard.putNumber("Raw Angle", module.getAngle().getDegrees());
+    SmartDashboard.putNumber("Raw Turning Motor Angle", module.getRawAngle());
     // turning PID information
     SmartDashboard.putNumber("PID/Setpoint", module.m_turningPIDController.getSetpoint().position);
     SmartDashboard.putNumber("PID/Error", module.m_turningPIDController.getPositionError());
-    SmartDashboard.putNumber("PID/Goal", module.getTurnGoal());
     //
     SmartDashboard.putNumber("Raw Drive Position", module.getDriveEncoderPosition());
     SmartDashboard.putNumber("Raw Drive Velocity", module.getDriveEncoderVelocity());

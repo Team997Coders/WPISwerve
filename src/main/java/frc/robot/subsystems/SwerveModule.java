@@ -18,7 +18,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.ModuleConstants;
@@ -36,7 +35,7 @@ public class SwerveModule {
 
   public double lastAngle;
 
-  private final PIDController m_drivePIDController = new PIDController(ModuleConstants.kPModuleDriveController, 0, 0);
+  public final PIDController m_drivePIDController = new PIDController(ModuleConstants.kPModuleDriveController, 0, 0);
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   public final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
@@ -50,7 +49,8 @@ public class SwerveModule {
   /**
    * Constructs a SwerveModule.
    *
-   * @param module_constants The module constants (i.e. CAN IDs) for this specific module
+   * @param module_constants The module constants (i.e. CAN IDs) for this specific
+   *                         module
    */
   public SwerveModule(SwerveModuleConstants module_constants) {
     this.module_constants = module_constants;
@@ -67,6 +67,32 @@ public class SwerveModule {
     lastAngle = getState().angle.getRadians();
   }
 
+  public double getRawAngle() {
+    return m_angleEncoder.getPosition();
+  }
+
+  public Rotation2d getAngle() {
+    double raw_angle = m_angleEncoder.getPosition();
+    Rotation2d rot = new Rotation2d(raw_angle);
+    return rot;
+  }
+
+  public double getDriveEncoderPosition() {
+    return m_driveMotorEncoder.getPosition();
+  }
+
+  public double getDriveEncoderVelocity() {
+    return m_driveMotorEncoder.getVelocity();
+  }
+
+  public void setMotorBrake(boolean brake) {
+    if (brake) {
+      m_driveMotor.setIdleMode(IdleMode.kBrake);
+    } else {
+      m_turningMotor.setIdleMode(IdleMode.kCoast);
+    }
+  }
+
   /**
    * Returns the current state of the module.
    *
@@ -74,8 +100,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     double velocity = m_driveMotorEncoder.getVelocity();
-    Rotation2d rot = new Rotation2d(m_angleEncoder.getPosition());
-    return new SwerveModuleState(velocity, rot);
+    return new SwerveModuleState(velocity, getAngle());
   }
 
   /**
@@ -99,13 +124,14 @@ public class SwerveModule {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, getState().angle);
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = m_drivePIDController.calculate(m_driveMotorEncoder.getVelocity(), state.speedMetersPerSecond);
-    SmartDashboard.putNumber("SetDesiredState/driveOutput", driveOutput);
+    final double driveOutput = m_drivePIDController.calculate(m_driveMotorEncoder.getVelocity(),
+        state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = m_turningPIDController.calculate(getAngle(), state.angle.getRadians());
-    SmartDashboard.putNumber("SetDesiredState/turnOutput", turnOutput);
+    final double turnOutput = m_turningPIDController.calculate(m_angleEncoder.getPosition(), state.angle.getRadians());
 
+    // Update the previous commanded angle for reference
+    lastAngle = state.angle.getRadians();
     // Calculate the turning motor output from the turning PID controller.
     m_driveMotor.set(driveOutput);
     m_turningMotor.set(turnOutput);
@@ -118,52 +144,25 @@ public class SwerveModule {
   }
 
   /*
-   * set up some convenient access functions for the raw devices on the module
+   * Configuration values for the module hardware. Specifically the motors and
+   * encoders.
    */
-  public double getAngle() {
-    return m_angleEncoder.getPosition();
-  }
-
-  public double getTurningEncoder() {
-    return m_turningMotorEncoder.getPosition();
-  }
-
-  public double getDriveEncoderPosition() {
-    return m_driveMotorEncoder.getPosition();
-  }
-
-  public double getDriveEncoderVelocity() {
-    return m_driveMotorEncoder.getVelocity();
-  }
-
-  public double getTurnGoal() {
-    double goal = m_turningPIDController.getGoal().position;
-    /*
-    while(goal > Math.PI * 2)
-      goal -= Math.PI * 2;
-
-    while(goal <= 0)
-      goal += Math.PI * 2; 
-    */
-
-    return goal;
-  }
-
-  /*
-  * Configuration values for the module hardware.  Specifically the motors and encoders. 
-  */
   private void configureDevices() {
     // Drive motor configuration:
-    //  - L2 NEO Motor connected to SParkMax
-    //  - NEO 1.1 motors with built in encoders with a resolution of 42 counts per revolution
-    //  - SDS4i model L2 has a drive motor to wheel ratio of 6.75:1
-    //      and an adjusted speed of 14.5 ft/sec with the NEO motors
-    //  - Outside wheel diameter = 4in
+    // - L2 NEO Motor connected to SParkMax
+    // - SDS4i model L2 has a drive motor to wheel ratio of 6.75:1
+    // and an adjusted speed of 14.5 ft/sec with the NEO motors
+    // - Outside wheel diameter = 4in
     m_driveMotor.restoreFactoryDefaults();
     m_driveMotor.clearFaults();
     if (m_driveMotor.setIdleMode(IdleMode.kCoast) != REVLibError.kOk) {
       SmartDashboard.putString("Drive Motor Idle Mode", "Error");
     }
+
+    // Set the distance per pulse for the drive encoder. We can simply use the
+    // distance traveled for one rotation of the wheel divided by the encoder
+    // resolution.
+    m_driveMotorEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderDistancePerPulse);
 
     // Set whether drive encoder should be reversed or not
     m_driveMotor.setInverted(module_constants.driveMotorReversed);
@@ -171,7 +170,7 @@ public class SwerveModule {
     // Set the distance (in this case, angle) in radians per pulse for the turning
     // encoder.
     // This is the the angle through an entire rotation (2 * pi) divided by the
-    // encoder resolution. NEO should be 42 pulses per revolution.
+    // encoder resolution.
     m_turningMotorEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderDistancePerPulse);
 
     // Set whether turning encoder should be reversed or not
@@ -199,14 +198,11 @@ public class SwerveModule {
      * input
      * Native will ready 0.0 -> 1.0 for each revolution.
      */
-    m_angleEncoder.setPositionConversionFactor(ModuleConstants.kAngleEncodeAnglePerRev);
+    m_angleEncoder.setZeroOffset(module_constants.angleEncoderOffsetDegrees); // native units 0.0 -> 1.0
     m_angleEncoder.setPositionConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
     m_angleEncoder.setVelocityConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
-    m_angleEncoder.setAverageDepth(8);
     m_angleEncoder.setInverted(false);
-    m_angleEncoder.setZeroOffset(module_constants.angleEncoderOffsetDegrees);
-    m_turningMotor.getPIDController().setFeedbackDevice(m_angleEncoder);
-    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-  }
 
+    m_turningPIDController.enableContinuousInput(0, 2 * Math.PI);
+  }
 }
