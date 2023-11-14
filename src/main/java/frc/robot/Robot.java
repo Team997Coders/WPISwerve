@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import com.revrobotics.REVPhysicsSim;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,10 +46,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double joy_angle = m_driverController.getLeftX();
+    double joy_angle = m_driverController.getLeftX()*Math.PI;
     SmartDashboard.putNumber("Joystick Angle", joy_angle);
-    module.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(joy_angle)));
-    //SmartDashboard.putNumber("Raw Joy Angle:", new Rotation2d(joy_angle).getDegrees());
+    SwerveModuleState state = new SwerveModuleState(0.0, new Rotation2d(joy_angle));
+    SmartDashboard.putNumber("early module state", state.angle.getRadians());
+    module.setDesiredState(state);
   }
 
   @Override

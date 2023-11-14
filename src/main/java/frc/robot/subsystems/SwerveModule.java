@@ -26,12 +26,12 @@ import frc.robot.utils.SwerveModuleConstants;
 public class SwerveModule {
   private SwerveModuleConstants module_constants;
 
-  private final CANSparkMax m_driveMotor;
-  private final CANSparkMax m_turningMotor;
+  public final CANSparkMax m_driveMotor;
+  public final CANSparkMax m_turningMotor;
 
-  private final RelativeEncoder m_driveMotorEncoder;
-  private final RelativeEncoder m_turningMotorEncoder;
-  private final SparkMaxAbsoluteEncoder m_angleEncoder;
+  public final RelativeEncoder m_driveMotorEncoder;
+  public final RelativeEncoder m_turningMotorEncoder;
+  public final SparkMaxAbsoluteEncoder m_angleEncoder;
 
   public double lastAngle;
 
@@ -121,7 +121,10 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, getState().angle);
+    //SwerveModuleState state = SwerveModuleState.optimize(desiredState, getState().angle);
+    SwerveModuleState state = desiredState;
+
+    SmartDashboard.putNumber("Desired Angle", state.angle.getRadians());
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(m_driveMotorEncoder.getVelocity(),
@@ -129,6 +132,9 @@ public class SwerveModule {
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = m_turningPIDController.calculate(m_angleEncoder.getPosition(), state.angle.getRadians());
+
+    SmartDashboard.putNumber("driveOutput", driveOutput);
+    SmartDashboard.putNumber("turnOutput", turnOutput);
 
     // Update the previous commanded angle for reference
     lastAngle = state.angle.getRadians();
