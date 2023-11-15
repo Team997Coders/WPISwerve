@@ -4,11 +4,8 @@
 
 package frc.robot;
 
-import com.revrobotics.REVPhysicsSim;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +27,8 @@ public class Robot extends TimedRobot {
   public SwerveModule module;
   // The gyro sensor
   public static NavXSwerve m_gyro;
+  double joy_angle = 0.0;
+
 
   public XboxController m_driverController = new XboxController(0);
 
@@ -46,11 +45,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double joy_angle = m_driverController.getLeftX()*Math.PI;
+    joy_angle = m_driverController.getLeftX()*Math.PI;
     SmartDashboard.putNumber("Joystick Angle", joy_angle);
     SwerveModuleState state = new SwerveModuleState(0.0, new Rotation2d(joy_angle));
-    SmartDashboard.putNumber("early module state", state.angle.getRadians());
     module.setDesiredState(state);
+
   }
 
   @Override
@@ -65,7 +64,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Raw Angle", module.getAngle().getDegrees());
     SmartDashboard.putNumber("Raw Turning Motor Angle", module.getRawAngle());
     // turning PID information
-    SmartDashboard.putNumber("PID/Setpoint", module.m_turningPIDController.getSetpoint().position);
     SmartDashboard.putNumber("PID/Error", module.m_turningPIDController.getPositionError());
     //
     SmartDashboard.putNumber("Raw Drive Position", module.getDriveEncoderPosition());
