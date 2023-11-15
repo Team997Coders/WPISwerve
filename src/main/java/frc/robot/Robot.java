@@ -4,102 +4,76 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVLibError;
-import com.revrobotics.REVPhysicsSim;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import frc.robot.Constants.ModuleConstants;
+import frc.robot.subsystems.SwerveModule;
+import frc.robot.utils.NavXSwerve;
+import edu.wpi.first.wpilibj.SerialPort;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final int driveMotorDeviceID = 4;
-  private static final int turnMotorDeviceID = 5;
-  private CANSparkMax m_driveMotor;
-  private CANSparkMax m_turnMotor;
-  private RelativeEncoder m_driveMotorEncoder;
-  private RelativeEncoder m_turnMotorEncoder;
-  private SparkMaxAbsoluteEncoder m_turnAngleEncoder;
+  public SwerveModule module;
+  // The gyro sensor
+  public static NavXSwerve m_gyro;
+  double joy_angle = 0.0;
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
+
+  public XboxController m_driverController = new XboxController(0);
+
   @Override
   public void robotInit() {
-    m_driveMotor = new CANSparkMax(driveMotorDeviceID, MotorType.kBrushless);
-    m_driveMotor.restoreFactoryDefaults();
-    m_driveMotor.clearFaults();
-    if(m_driveMotor.setIdleMode(IdleMode.kCoast) != REVLibError.kOk){
-      SmartDashboard.putString("Drive Motor Idle Mode", "Error");
-    }
-
-    m_turnMotor = new CANSparkMax(turnMotorDeviceID, MotorType.kBrushless);
-    m_turnMotor.restoreFactoryDefaults();
-    m_turnMotor.clearFaults();
-    if(m_turnMotor.setIdleMode(IdleMode.kCoast) != REVLibError.kOk){
-      SmartDashboard.putString("Turn Motor Idle Mode", "Error");
-    }
-
-    m_driveMotorEncoder = m_driveMotor.getEncoder();
-    m_turnMotorEncoder = m_turnMotor.getEncoder();
-
-    m_turnAngleEncoder = m_turnMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    resetEncoders();
-    stopAll();
-  }
-
-  public void resetEncoders() {
-    m_driveMotorEncoder.setPosition(0);
-    m_turnMotorEncoder.setPosition(0);
-  }
-
-  public void stopAll() {
-    m_driveMotor.set(0);
-    m_turnMotor.set(0);
+    module = new SwerveModule(ModuleConstants.kMOD_3_Constants);
+    m_gyro = new NavXSwerve(SerialPort.Port.kMXP);
   }
 
   @Override
-  public void teleopInit() {
-    m_turnMotor.set(0.2);
+  public void autonomousPeriodic() {
+    module.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(0.0)));
   }
 
   @Override
-  public void disabledInit() {
-    stopAll();
+  public void teleopPeriodic() {
+    joy_angle = m_driverController.getLeftX()*Math.PI;
+    SmartDashboard.putNumber("Joystick Angle", joy_angle);
+    SwerveModuleState state = new SwerveModuleState(0.0, new Rotation2d(joy_angle));
+    module.setDesiredState(state);
+
   }
 
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("Drive Encoder", m_driveMotorEncoder.getPosition());
-    SmartDashboard.putNumber("Turning Motor Encoder", m_turnMotorEncoder.getPosition());
-    SmartDashboard.putNumber("Turning Angle Encoder", m_turnAngleEncoder.getPosition());
+    // swerve module state
+    SwerveModuleState state = module.getState();
+    SmartDashboard.putNumber("Module State - Velocity: ", state.speedMetersPerSecond);
+    SmartDashboard.putNumber("Module State - Angle: ", state.angle.getDegrees());
+    SmartDashboard.putNumber("Module Position - Distance: ", module.getPosition().distanceMeters);
+    SmartDashboard.putNumber("Module Position - Angle: ", module.getPosition().angle.getDegrees());
+    // raw hardware
+    SmartDashboard.putNumber("Raw Angle", module.getAngle().getDegrees());
+    SmartDashboard.putNumber("Raw Turning Motor Angle", module.getRawAngle());
+    // turning PID information
+    SmartDashboard.putNumber("PID/Error", module.m_turningPIDController.getPositionError());
+    //
+    SmartDashboard.putNumber("Raw Drive Position", module.getDriveEncoderPosition());
+    SmartDashboard.putNumber("Raw Drive Velocity", module.getDriveEncoderVelocity());
+    //
+    SmartDashboard.putNumber("Gyro YAW", m_gyro.getYaw());
+    SmartDashboard.putNumber("Gyro Rotation", m_gyro.getRotation3d().getAngle());
   }
 
-  public void simulationInit(){
-    REVPhysicsSim.getInstance().addSparkMax(m_turnMotor, DCMotor.getNEO(1));
-  }
+  public void simulationInit(){}
 
-  public void simulationPeriodic(){
-    REVPhysicsSim.getInstance().run();    
-    System.out.println("Motor speed: " + m_turnMotorEncoder.getPosition());
-  }
+  public void simulationPeriodic(){}
 }
