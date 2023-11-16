@@ -67,12 +67,16 @@ public class SwerveModule {
     lastAngle = getState().angle.getRadians();
   }
 
+  public double map(double x, double in_min, double in_max, double out_min, double out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }
+
   public double getRawAngle() {
     return m_angleEncoder.getPosition();
   }
 
   public Rotation2d getAngle() {
-    double raw_angle = m_angleEncoder.getPosition();
+    double raw_angle = getRawAngle();
     Rotation2d rot = new Rotation2d(raw_angle);
     return rot;
   }
@@ -99,7 +103,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    double velocity = m_driveMotorEncoder.getVelocity();
+    double velocity =getDriveEncoderVelocity();
     return new SwerveModuleState(velocity, getAngle());
   }
 
@@ -109,8 +113,8 @@ public class SwerveModule {
    * @return The current position of the module.
    */
   public SwerveModulePosition getPosition() {
-    double distance = m_driveMotorEncoder.getPosition();
-    Rotation2d rot = new Rotation2d(m_angleEncoder.getPosition());
+    double distance = getDriveEncoderPosition();
+    Rotation2d rot = getAngle();
     return new SwerveModulePosition(distance, rot);
   }
 
@@ -121,7 +125,8 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    //SwerveModuleState state = SwerveModuleState.optimize(desiredState, getState().angle);
+    // SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+    // getState().angle);
     SwerveModuleState state = desiredState;
 
     SmartDashboard.putNumber("Desired Angle", state.angle.getRadians());
@@ -204,11 +209,11 @@ public class SwerveModule {
      * input
      * Native will ready 0.0 -> 1.0 for each revolution.
      */
-    m_angleEncoder.setZeroOffset(module_constants.angleEncoderOffsetDegrees); // native units 0.0 -> 1.0
-    m_angleEncoder.setPositionConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
-    m_angleEncoder.setVelocityConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
+    //m_angleEncoder.setZeroOffset(module_constants.angleEncoderOffsetDegrees); // native units 0.0 -> 1.0
+    //m_angleEncoder.setPositionConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
+    //m_angleEncoder.setVelocityConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
     m_angleEncoder.setInverted(false);
 
-    m_turningPIDController.enableContinuousInput(0, 2 * Math.PI);
+    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 }
