@@ -77,7 +77,9 @@ public class SwerveModule {
 
   public Rotation2d getAngle() {
     double raw_angle = getRawAngle();
-    Rotation2d rot = new Rotation2d(raw_angle);
+    double mapped = map(raw_angle, 0.0, 1.0, -Math.PI, Math.PI);
+    SmartDashboard.putNumber("Mapped Raw Angle", mapped);
+    Rotation2d rot = new Rotation2d(mapped);
     return rot;
   }
 
@@ -103,7 +105,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    double velocity =getDriveEncoderVelocity();
+    double velocity = getDriveEncoderVelocity();
     return new SwerveModuleState(velocity, getAngle());
   }
 
@@ -209,9 +211,10 @@ public class SwerveModule {
      * input
      * Native will ready 0.0 -> 1.0 for each revolution.
      */
-    //m_angleEncoder.setZeroOffset(module_constants.angleEncoderOffsetDegrees); // native units 0.0 -> 1.0
-    //m_angleEncoder.setPositionConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
-    //m_angleEncoder.setVelocityConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
+    // m_angleEncoder.setZeroOffset(module_constants.angleEncoderOffsetDegrees); //
+    // native units 0.0 -> 1.0
+    // m_angleEncoder.setPositionConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
+    // m_angleEncoder.setVelocityConversionFactor(Constants.ModuleConstants.kAngleEncodeAnglePerRev);
     m_angleEncoder.setInverted(false);
 
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
