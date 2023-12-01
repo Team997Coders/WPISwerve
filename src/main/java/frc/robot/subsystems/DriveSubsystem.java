@@ -207,13 +207,13 @@ public class DriveSubsystem extends SubsystemBase {
 
     updateOdometry();
 
-    SmartDashboard.putNumber("Front Left Position: ", m_frontLeft.getPosition().distanceMeters);
-    SmartDashboard.putNumber("Module Position Angle", m_frontLeft.getPosition().angle.getDegrees());
+    SmartDashboard.putNumber("Front Left Position: ", m_frontRight.getPosition().distanceMeters);
+    SmartDashboard.putNumber("Module Position Angle", m_frontRight.getPosition().angle.getDegrees());
     SmartDashboard.putNumber("Odometry X", m_odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("Odometry Y", m_odometry.getPoseMeters().getY());
     SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-    SmartDashboard.putNumber("Module/Raw Angle", m_frontLeft.getRawAngle());
-    SmartDashboard.putNumber("Module/Mapped Angle", m_frontLeft.getAngle().getRadians());
+    SmartDashboard.putNumber("Module/Raw Angle", m_frontRight.getRawAngle());
+    SmartDashboard.putNumber("Module/Mapped Angle", m_frontRight.getAngle().getRadians());
     SmartDashboard.putNumber("Gyro Rotation", getGyroRotation2d().getDegrees());
   }
 }

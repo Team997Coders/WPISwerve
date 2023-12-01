@@ -49,8 +49,8 @@ public final class Constants {
 
     public static final class ModuleConstants {
 
-        public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
-        public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
+        public static final double kMaxModuleAngularSpeedRadiansPerSecond = 4 * Math.PI;
+        public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI;
 
         public static final int kEncoderCPR = 1024;
         public static final double kWheelDiameterMeters = 0.15;
@@ -87,7 +87,7 @@ public final class Constants {
         public static final int ANGLE_CURRENT_LIMIT = 25;
 
         /** Module PID Kp constants */
-        public static final double kPModuleTurningController = 0.01;
+        public static final double kPModuleTurningController = 0.2;
         public static final double kPModuleDriveController = 0.0020645;
 
         /**
@@ -112,31 +112,32 @@ public final class Constants {
                 6,
                 7,
                 true,
+                false,
+                false,
+                0.20 // 152.0 degrees = 360 * 0.7069
+        );
+
+        // Back Right
+        public static final SwerveModuleConstants kMOD_3_Constants = new SwerveModuleConstants(
+                4,
+                4,
+                5,
                 true,
                 false,
-                0.7069 // 152.0 degrees = 360 * 0.7069
+                false,
+                0.23 // good number
+                 // 131.0 degrees = 360 * 0.324
         );
 
         // Back Left
-        public static final SwerveModuleConstants kMOD_3_Constants = new SwerveModuleConstants(
-                4,
+        public static final SwerveModuleConstants kMOD_4_Constants = new SwerveModuleConstants(
+                3,
                 2,
                 3,
                 true,
                 true,
                 false,
-                0.324 // 131.0 degrees = 360 * 0.324
-        );
-
-        // Back Right
-        public static final SwerveModuleConstants kMOD_4_Constants = new SwerveModuleConstants(
-                3,
-                4,
-                5,
-                true,
-                true,
-                false,
-                0.4221 // 152.0 degrees = 360 * 0.4221
+                0.60 // good number 
         );
     }
 
