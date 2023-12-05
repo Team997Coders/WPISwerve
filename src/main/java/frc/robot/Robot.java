@@ -45,11 +45,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    joy_angle = m_driverController.getLeftX()*Math.PI;
+    joy_angle = -m_driverController.getLeftX()*Math.PI;
     SmartDashboard.putNumber("Joystick Angle", joy_angle);
     SwerveModuleState state = new SwerveModuleState(0.0, new Rotation2d(joy_angle));
     module.setDesiredState(state);
-
   }
 
   @Override
@@ -70,8 +69,4 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro YAW", m_gyro.getYaw());
     SmartDashboard.putNumber("Gyro Rotation", m_gyro.getRotation3d().getAngle());
   }
-
-  public void simulationInit(){}
-
-  public void simulationPeriodic(){}
 }
