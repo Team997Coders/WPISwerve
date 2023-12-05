@@ -63,8 +63,6 @@ public class Robot extends TimedRobot {
     // raw hardware
     SmartDashboard.putNumber("Raw Angle", module.getAngle().getDegrees());
     SmartDashboard.putNumber("Raw Turning Motor Angle", module.getRawAngle());
-    // turning PID information
-    SmartDashboard.putNumber("PID/Error", module.m_turningPIDController.getPositionError());
     //
     SmartDashboard.putNumber("Raw Drive Position", module.getDriveEncoderPosition());
     SmartDashboard.putNumber("Raw Drive Velocity", module.getDriveEncoderVelocity());
