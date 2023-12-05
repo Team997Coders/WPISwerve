@@ -60,11 +60,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Module Position - Distance: ", module.getPosition().distanceMeters);
     SmartDashboard.putNumber("Module Position - Angle: ", module.getPosition().angle.getDegrees());
     // raw hardware
-    SmartDashboard.putNumber("Raw Angle", module.getAngle().getDegrees());
     SmartDashboard.putNumber("Raw Turning Motor Angle", module.getRawAngle());
-    //
-    SmartDashboard.putNumber("Raw Drive Position", module.getDriveEncoderPosition());
-    SmartDashboard.putNumber("Raw Drive Velocity", module.getDriveEncoderVelocity());
+    SmartDashboard.putNumber("Module Angle", module.getAngle().getDegrees());
+    SmartDashboard.putBoolean("Module Zeroed", (module.getAngle().getRadians() == 0.0));
     //
     SmartDashboard.putNumber("Gyro YAW", m_gyro.getYaw());
     SmartDashboard.putNumber("Gyro Rotation", m_gyro.getRotation3d().getAngle());
