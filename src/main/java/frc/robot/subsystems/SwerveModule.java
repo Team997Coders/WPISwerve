@@ -157,6 +157,7 @@ public class SwerveModule {
     SmartDashboard.putNumber("State/driveOutput", driveOutput);
     SmartDashboard.putNumber("State/turnOutput", turnOutput);
     SmartDashboard.putNumber("State/Trapezoidal turnOutput", turnOutput_trap);
+    SmartDashboard.putNumber("Module offset", m_angleEncoder.getZeroOffset());
 
 
     // Calculate the turning motor output from the turning PID controller.
