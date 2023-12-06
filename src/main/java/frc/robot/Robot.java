@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    module = new SwerveModule(ModuleConstants.kMOD_1_Constants);
+    module = new SwerveModule(ModuleConstants.kMOD_3_Constants);
     m_gyro = new NavXSwerve(SerialPort.Port.kMXP);
   }
 
