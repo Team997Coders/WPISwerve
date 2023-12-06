@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    module = new SwerveModule(ModuleConstants.kMOD_3_Constants);
+    module = new SwerveModule(ModuleConstants.kMOD_1_Constants);
     m_gyro = new NavXSwerve(SerialPort.Port.kMXP);
   }
 
@@ -67,4 +67,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro YAW", m_gyro.getYaw());
     SmartDashboard.putNumber("Gyro Rotation", m_gyro.getRotation3d().getAngle());
   }
+
+
 }
