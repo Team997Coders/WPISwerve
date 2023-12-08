@@ -87,8 +87,8 @@ public final class Constants {
         public static final int ANGLE_CURRENT_LIMIT = 25;
 
         /** Module PID Kp constants */
-        public static final double kPModuleTurningController = 0.20;
-        public static final double kPModuleDriveController = 0.0020645;
+        public static final double kPModuleTurningController = 0.60;
+        public static final double kPModuleDriveController = 0.620645;
 
         /**
          * Module specific constants.
@@ -103,7 +103,7 @@ public final class Constants {
                 true,
                 true,
                 false,
-                0.28 // 254.5 degrees = 360 * 0.060
+                0.37 // 254.5 degrees = 360 * 0.060
         );
 
         // Front Right
@@ -114,7 +114,7 @@ public final class Constants {
                 true,
                 true,
                 false,
-                0.48 //0.7069 // 152.0 degrees = 360 * 0.7069
+                0.52 //0.7069 // 152.0 degrees = 360 * 0.7069
         );
 
         // Back Left
@@ -125,7 +125,7 @@ public final class Constants {
                 true,
                 true,
                 false,
-                 0.7 // 0.324 // 131.0 degrees = 360 * 0.324
+                 0.655 // 0.324 // 131.0 degrees = 360 * 0.324
         );
 
         // Back Right
@@ -136,7 +136,7 @@ public final class Constants {
                 true,
                 true,
                 false,
-                0.202 //0.4221 // 152.0 degrees = 360 * 0.4221
+                0.245 //0.4221 // 152.0 degrees = 360 * 0.4221
         );
     }
 

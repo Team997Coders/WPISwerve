@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    module = new SwerveModule(ModuleConstants.kMOD_3_Constants);
+    module = new SwerveModule(ModuleConstants.kMOD_2_Constants);
     m_gyro = new NavXSwerve(SerialPort.Port.kMXP);
   }
 
@@ -59,6 +59,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Module State - Angle: ", state.angle.getDegrees());
     SmartDashboard.putNumber("Module Position - Distance: ", module.getPosition().distanceMeters);
     SmartDashboard.putNumber("Module Position - Angle: ", module.getPosition().angle.getDegrees());
+    SmartDashboard.putNumber("Module velocity", module.getDriveEncoderVelocity()); 
     // raw hardware
     SmartDashboard.putNumber("Raw Turning Motor Angle", module.getRawAngle());
     SmartDashboard.putNumber("Module Angle", module.getAngle().getDegrees());
