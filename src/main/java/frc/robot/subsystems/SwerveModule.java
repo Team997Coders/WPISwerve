@@ -195,7 +195,7 @@ public class SwerveModule {
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_driveMotorEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderDistancePerPulse);
+    m_driveMotorEncoder.setPositionConversionFactor(42/6.75);
 
     // Angle motor configuration.
     // Neo Motor connected to SParkMax (all turn motors are reversed in the SDS 4i)
