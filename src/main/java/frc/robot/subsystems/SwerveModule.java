@@ -95,6 +95,7 @@ public class SwerveModule {
     return rot;
   }
 
+
   /**
    * Get the Drive motor encoder position
    * 
@@ -120,7 +121,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     double velocity = getDriveEncoderVelocity();
-    return new SwerveModuleState(velocity, getAngle());
+    return new SwerveModuleState(velocity, new Rotation2d(getTurnPosition()));
   }
 
   /**
@@ -130,9 +131,13 @@ public class SwerveModule {
    */
   public SwerveModulePosition getPosition() {
     double distance = getDriveEncoderPosition();
-    Rotation2d rot = getAngle();
+    Rotation2d rot = new Rotation2d(getTurnPosition());
     return new SwerveModulePosition(distance, rot);
   }
+
+  public double getTurnPosition() {
+    return m_turningMotorEncoder.getPosition() / Constants.ModuleConstants.DRIVE_GEAR_RATIO;
+  } 
 
   /**
    * Sets the desired state for the module.
@@ -222,6 +227,8 @@ public class SwerveModule {
      * Make PID continuous around the 180degree point of the rotation
      */
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    m_turningPIDController.setTolerance(0);
     m_simpleTurningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+   
   }
 }

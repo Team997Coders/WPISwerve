@@ -95,7 +95,7 @@ public final class Constants {
 
                 /** Module PID Kp constants */
                 public static final double kPModuleTurningController = 0.60;
-                public static final double kPModuleDriveController = 0.60645;
+                public static final double kPModuleDriveController = 0.0;
 
                 /**
                  * Module specific constants.
