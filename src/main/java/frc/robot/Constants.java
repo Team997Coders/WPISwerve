@@ -94,7 +94,7 @@ public final class Constants {
                 public static final int ANGLE_CURRENT_LIMIT = 25;
 
                 /** Module PID Kp constants */
-                public static final double kPModuleTurningController = 0.25;
+                public static final double kPModuleTurningController = 0.12;
                 public static final double kPModuleDriveController = 0.0020645;
 
                 /**
