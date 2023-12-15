@@ -217,6 +217,7 @@ public class SwerveModule {
     m_angleEncoder.setZeroOffset(module_constants.angleEncoderOffset);
     m_angleEncoder.setInverted(module_constants.angleEncoderReversed);
     m_angleEncoder.setAverageDepth(16);
+    m_angleEncoder.setPositionConversionFactor(Math.PI * 2);
     
     /**
      * Make PID continuous around the 180degree point of the rotation
