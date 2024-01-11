@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.DistDrive;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -102,8 +103,7 @@ public class RobotContainer {
 	// false));
 	// }
 	public Command getAutonomousCommand() {
-		return new RunCommand(
-				() -> m_robotDrive.drive(0, 0, 0, false));
+		return new DistDrive(m_robotDrive, 1);
 	}
 
 	public Command moveTurnCommand(double rot) {
