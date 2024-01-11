@@ -18,6 +18,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
+
+enum TestType{
+	Angles,
+	Distance
+}
+
 public class RobotContainer {
 	// The robot's subsystems
 	private final DriveSubsystem m_robotDrive = new DriveSubsystem();
@@ -25,6 +31,7 @@ public class RobotContainer {
 	// The driver's controller
 	CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
 
+	private TestType testType;
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
@@ -103,7 +110,15 @@ public class RobotContainer {
 	// false));
 	// }
 	public Command getAutonomousCommand() {
-		return new DistDrive(m_robotDrive, 1);
+		
+		if(this.testType == TestType.Distance){
+			return new DistDrive(m_robotDrive, 1);
+		}
+		else if(this.testType == TestType.Angles){
+			
+		}
+		return new RunCommand(
+				() -> m_robotDrive.testModulesAngles(0.5 * Math.PI));//m_robotDrive.drive(0, 0, 0, false));
 	}
 
 	public Command moveTurnCommand(double rot) {
