@@ -103,7 +103,7 @@ public class RobotContainer {
 	// }
 	public Command getAutonomousCommand() {
 		return new RunCommand(
-				() -> m_robotDrive.drive(0, 0, 0, false));
+				() -> m_robotDrive.testModulesAngles(0.5 * Math.PI));//m_robotDrive.drive(0, 0, 0, false));
 	}
 
 	public Command moveTurnCommand(double rot) {

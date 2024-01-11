@@ -204,6 +204,30 @@ public class DriveSubsystem extends SubsystemBase {
     Robot.m_field.setRobotPose(m_odometry.getPoseMeters());
   }
 
+  // turns modules x degrees from current position 
+  public void testModulesAngles(double test_angle) {
+    while(true) {    
+      // new Thread(() -> {
+      try {
+        Thread.sleep(5000);
+        double newFrontLeftAngle = m_frontLeft.getRawAngle() + test_angle;
+        double newFrontRightAngle = m_frontRight.getRawAngle() + test_angle;
+        double newRearLeftAngle = m_rearLeft.getRawAngle() + test_angle;
+        double newRearRightAngle = m_rearRight.getRawAngle() + test_angle;
+        m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(newFrontLeftAngle)));
+        m_frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(newFrontRightAngle)));
+        m_rearLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(newRearLeftAngle)));
+        m_rearRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(newRearRightAngle)));
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        }
+      }
+      
+      // }).start();
+    
+
+  }
+
   @Override
   public void periodic() {
 
