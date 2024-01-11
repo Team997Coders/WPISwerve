@@ -66,7 +66,7 @@ public class SwerveModule {
 
     m_driveMotorEncoder = m_driveMotor.getEncoder();
     m_turningMotorEncoder = m_turningMotor.getEncoder();
-
+  
     m_angleEncoder = m_turningMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
     configureDevices();
@@ -89,8 +89,8 @@ public class SwerveModule {
    */
   public Rotation2d getAngle() {
     double raw_angle = getRawAngle();
-    double mapped = LinearMap.map(raw_angle, 0.0, 1.0, -Math.PI, Math.PI);
-    SmartDashboard.putNumber("Mapped Raw Module Angle", mapped);
+    double mapped = LinearMap.boundAngle(raw_angle);
+    SmartDashboard.putNumber(this.module_constants.moduleNumber + " Mapped Raw Module Angle", mapped);
     Rotation2d rot = new Rotation2d(mapped);
     return rot;
   }
@@ -101,7 +101,9 @@ public class SwerveModule {
    * @return the drive encoder position
    */
   public double getDriveEncoderPosition() {
-    return m_driveMotorEncoder.getPosition();
+    double raw_position = m_driveMotorEncoder.getPosition();
+    SmartDashboard.putNumber(this.module_constants.moduleNumber + " Mapped Raw Module raw_position", raw_position);
+    return raw_position;
   }
 
   /**
@@ -110,7 +112,9 @@ public class SwerveModule {
    * @return drive encoder velocity
    */
   public double getDriveEncoderVelocity() {
-    return m_driveMotorEncoder.getVelocity();
+    double raw_velocity= m_driveMotorEncoder.getVelocity();
+    SmartDashboard.putNumber(this.module_constants.moduleNumber + "Mapped Raw Module Velocity", raw_velocity);
+    return raw_velocity;
   }
 
   /**
@@ -208,6 +212,7 @@ public class SwerveModule {
     m_turningMotor.setInverted(module_constants.angleMotorReversed);
     m_turningMotor.setSmartCurrentLimit(Constants.ModuleConstants.ANGLE_CURRENT_LIMIT);
     m_turningMotorEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderDistancePerPulse);
+    
 
     /**
      * CTRE Mag Encoder connected to the SparkMAX Absolute/Analog/PWM Duty Cycle
