@@ -90,7 +90,7 @@ public class SwerveModule {
   public Rotation2d getAngle() {
     double raw_angle = getRawAngle();
     double mapped = LinearMap.boundAngle(raw_angle);
-    SmartDashboard.putNumber(this.module_constants.moduleNumber + " Mapped Raw Module Angle", mapped);
+    SmartDashboard.putNumber(this.module_constants.moduleNumber + " getAngle", mapped);
     Rotation2d rot = new Rotation2d(mapped);
     return rot;
   }
@@ -102,7 +102,7 @@ public class SwerveModule {
    */
   public double getDriveEncoderPosition() {
     double raw_position = m_driveMotorEncoder.getPosition();
-    SmartDashboard.putNumber(this.module_constants.moduleNumber + " Mapped Raw Module raw_position", raw_position);
+    SmartDashboard.putNumber(this.module_constants.moduleNumber + " Drive raw_position", raw_position);
     return raw_position;
   }
 
@@ -113,7 +113,7 @@ public class SwerveModule {
    */
   public double getDriveEncoderVelocity() {
     double raw_velocity= m_driveMotorEncoder.getVelocity();
-    SmartDashboard.putNumber(this.module_constants.moduleNumber + "Mapped Raw Module Velocity", raw_velocity);
+    SmartDashboard.putNumber(this.module_constants.moduleNumber + "Drive raw Velocity", raw_velocity);
     return raw_velocity;
   }
 
@@ -218,11 +218,11 @@ public class SwerveModule {
      * CTRE Mag Encoder connected to the SparkMAX Absolute/Analog/PWM Duty Cycle
      * input
      * Native will ready 0.0 -> 1.0 for each revolution.
-     */
-    m_angleEncoder.setZeroOffset(module_constants.angleEncoderOffset);
+     */ 
     m_angleEncoder.setInverted(module_constants.angleEncoderReversed);
-    m_angleEncoder.setAverageDepth(16);
+    m_angleEncoder.setZeroOffset(module_constants.angleEncoderOffset / (Math.PI * 2));
     m_angleEncoder.setPositionConversionFactor(Math.PI * 2);
+    m_angleEncoder.setAverageDepth(16);
     
     /**
      * Make PID continuous around the 180degree point of the rotation
