@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import java.sql.Timestamp;
+import java.util.Timer;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -202,6 +205,27 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
     Robot.m_field.setRobotPose(m_odometry.getPoseMeters());
+  }
+
+  // turns modules x degrees from current position 
+  public void testModulesAngles(double test_angle) {
+    long start_time = System.currentTimeMillis();
+    while (true){
+      long now = System.currentTimeMillis();
+      long elapsed = now - start_time;
+
+      if (elapsed > 5000){
+        double newFrontLeftAngle = m_frontLeft.getRawAngle() + test_angle;
+        double newFrontRightAngle = m_frontRight.getRawAngle() + test_angle;
+        double newRearLeftAngle = m_rearLeft.getRawAngle() + test_angle;
+        double newRearRightAngle = m_rearRight.getRawAngle() + test_angle;
+        m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(newFrontLeftAngle)));
+        m_frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(newFrontRightAngle)));
+        m_rearLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(newRearLeftAngle)));
+        m_rearRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(newRearRightAngle)));
+        start_time = now;
+      }
+    }
   }
 
   @Override
