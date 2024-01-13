@@ -171,7 +171,7 @@ public class SwerveModule {
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
     m_driveMotorEncoder.setPosition(0.0);
-    m_turningMotorEncoder.setPosition(getAngle().getRadians());
+    // m_turningMotorEncoder.setPosition(getAngle().getRadians());
   }
 
   public void stop() {

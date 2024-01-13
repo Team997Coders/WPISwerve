@@ -14,7 +14,7 @@ public class DistDrive extends CommandBase {
     double effort;
     double startY;
     SwerveModuleState[] swerveModuleStates = {new SwerveModuleState(),new SwerveModuleState(),new SwerveModuleState(),new SwerveModuleState()};
-    PIDController pidController = new PIDController(0.01, 0, 0);
+    PIDController pidController = new PIDController(0.01, 0.01, 0.01);
 
     public DistDrive(DriveSubsystem driveSubsystem, double setpointMeters){
         this.driveSubsystem = driveSubsystem;
@@ -32,8 +32,6 @@ public class DistDrive extends CommandBase {
         swerveModuleStates[1].speedMetersPerSecond = effort;
         swerveModuleStates[2].speedMetersPerSecond = effort;
         swerveModuleStates[3].speedMetersPerSecond = effort;
-        driveSubsystem.setModuleStates(swerveModuleStates);
-        
-        
+        driveSubsystem.setModuleStates(swerveModuleStates);        
     }
 }

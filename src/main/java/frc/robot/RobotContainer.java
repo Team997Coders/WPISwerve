@@ -31,7 +31,7 @@ public class RobotContainer {
 	// The driver's controller
 	CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
 
-	private TestType testType;
+	private TestType testType = TestType.Distance;
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
